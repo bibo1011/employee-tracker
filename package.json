@@ -1,0 +1,28 @@
+{
+  "name": "employee_tracker",
+  "version": "1.0.0",
+  "description": "app that tracks employee",
+  "main": "server.js",
+  "dependencies": {
+    "ascii-art": "^2.5.0",
+    "ascii-art-table": "^1.0.1",
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql2": "^2.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bibo1011/employee-tracker.git"
+  },
+  "author": "bad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bibo1011/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/bibo1011/employee-tracker#readme"
+}
