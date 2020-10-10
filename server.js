@@ -21,16 +21,37 @@ connection.connect(err => {
 });
 
 afterConnection = () => {
-    // Write a simple query that will SELECT everything from the 'products' table
-    // Log the results in the console
-    //
-    // YOUR CODE HERE
-    //
-    // connection.query('SELECT * FROM employee', function (err, res) {
-    //   if (err) throw err;
-    //   console.log(results)
-    //   }
-    // );
-    // connection.end();
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'options',
+            message: 'Choose your options:',
+            choices: [
+                'View all departments',
+                'View all roles',
+                'View all employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update an employee role'
+            ]
+        }
+    ])
+    .then (answer => {
+        switch (answer.options){
+            case 'View all departments':
+                readDepartment();
+                break; 
+        }
+    })
 };
+
+readDepartment = () => {
+    console.log('Selecting all department...\n')
+    connection.query('SELECT * FROM department', function (err, res) {
+        if (err) throw err;
+        console.log(res)
+    });
+    connection.end();
+}
   
