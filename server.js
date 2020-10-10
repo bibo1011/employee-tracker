@@ -20,7 +20,9 @@ connection.connect(err => {
     afterConnection();
 });
 
-afterConnection = () => {
+const joinEmployee = "SELECT employee.id, employee.first_name as First_Name, employee.last_name as Last_Name,role.title as Title, department.name as Department, role.salary as Salary, employee.manager_id as Manager FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON role.department_id=department.id"
+
+async function afterConnection(){
     return inquirer.prompt([
         {
             type: 'list',
@@ -40,18 +42,54 @@ afterConnection = () => {
     .then (answer => {
         switch (answer.options){
             case 'View all departments':
-                readDepartment();
+                readDepartments();
+                break; 
+            case 'View all roles':
+                readRoles();
+                break; 
+            case 'View all employees':
+                readEmployees();
+                break; 
+            case 'Add a department':
+                addDepartment();
+                break;
+            case 'Add a role':
+                addRole();
+                break; 
+            case 'Add an employee':
+                addEmployee();
+                break; 
+            case 'Update an employee role':
+                updateRole();
                 break; 
         }
     })
 };
 
-readDepartment = () => {
-    console.log('Selecting all department...\n')
-    connection.query('SELECT * FROM department', function (err, res) {
+async function readDepartments(){
+    console.log('Selecting all departments...\n')
+    connection.query('SELECT department.id, name as Department FROM department', function (err, res) {
         if (err) throw err;
-        console.log(res)
+        console.table(res);
+        afterConnection();
     });
-    connection.end();
+}
+
+async function readRoles(){
+    console.log('Selecting all roles...\n')
+    connection.query('SELECT role.id, role.title as Title, role.department_id as Department, role.salary as Salary FROM role INNER JOIN department ON role.department_id=department.id', function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        afterConnection();
+    });
+}
+
+async function readEmployees(){
+    console.log('Selecting all employees...\n')
+    connection.query(joinEmployee, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        afterConnection();
+    });
 }
   
