@@ -35,7 +35,8 @@ async function afterConnection(){
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee role'
+                'Update an employee role',
+                'Exit'
             ]
         }
     ])
@@ -62,6 +63,8 @@ async function afterConnection(){
             case 'Update an employee role':
                 updateRole();
                 break; 
+            case 'Exit':
+                exit();
         }
     })
 };
@@ -91,5 +94,88 @@ async function readEmployees(){
         console.table(res);
         afterConnection();
     });
+}
+
+async function addDepartment(){
+    // console.log('')
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'department',
+            message: 'Enter name of department:'
+        }
+    ])
+    .then (add => {
+        // console.log(add.department);
+        console.log('Adding new department...\n');
+        connection.query('INSERT INTO department SET ?', 
+        { 
+            name: add.department 
+        }, 
+        function(err, res) {
+            if (err) throw err;
+            console.table(res.affectedRows);
+            readDepartments();
+        })
+    })
+}
+
+async function addRole() {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'roleName',
+            message: 'Enter name of the role:'
+        },
+        {
+            type: 'input',
+            name: 'roleSalary',
+            message: 'Enter salary for the role:'
+        },
+        {
+            type: 'input',
+            name: 'roleDepartment',
+            message: 'Enter department for the role:'
+        }
+    ])
+}
+
+async function addEmployee() {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'Enter employee\'\s first name:'
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'Enter employee\'\s last name:'
+        },
+        {
+            type: 'input',
+            name: 'empRole',
+            message: 'Enter employee\'\s role:'
+        },
+        {
+            type: 'input',
+            name: 'empManager',
+            message: 'Enter employee\'\s manager:'
+        }
+    ])
+}
+
+// async function updateRole() {
+//     return inquirer.prompt([
+//         {
+//             type: 'list',
+//             name: 'upRole'
+//             message: ''
+//         }
+//     ])
+// }
+
+async function exit() {
+    connection.end();
 }
   
