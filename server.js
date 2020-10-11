@@ -133,11 +133,33 @@ async function addRole() {
             message: 'Enter salary for the role:'
         },
         {
-            type: 'input',
+            type: 'rawlist',
             name: 'roleDepartment',
-            message: 'Enter department for the role:'
+            message: 'Enter department for the role:',
+            choices: [
+                'Sales',
+                'Engineering',
+                'Finance',
+                'Legal'
+            ]
+
         }
     ])
+    .then (add => {
+        console.log(add.roleDepartment);
+        console.log('Adding new role...\n');
+        // connection.query('INSERT INTO role SET ?', 
+        // { 
+        //     title: add.roleName,
+        //     salary: add.roleSalary,
+        //     department_id: add.roleDepartment
+        // }, 
+        // function(err, res) {
+        //     if (err) throw err;
+        //     console.table(res.affectedRows);
+        //     readRoles();
+        // })
+    })
 }
 
 async function addEmployee() {
@@ -163,17 +185,34 @@ async function addEmployee() {
             message: 'Enter employee\'\s manager:'
         }
     ])
+    .then (add => {
+        console.log(add.firstName);
+        console.log('Adding new employee...\n');
+        // connection.query('INSERT INTO employee SET ?', 
+        // { 
+        //     first_name: add.firstName,
+        //     last_name: add.lastName,
+        //     role_id: add.empRole,
+        //     manager_id: add.empManager
+        // }, 
+        // function(err, res) {
+        //     if (err) throw err;
+        //     console.table(res.affectedRows);
+        //     readEmployee();
+        // })
+    })
 }
 
-// async function updateRole() {
-//     return inquirer.prompt([
-//         {
-//             type: 'list',
-//             name: 'upRole'
-//             message: ''
-//         }
-//     ])
-// }
+async function updateRole() {
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'upRole',
+            message: 'Select an employee to update:',
+            choices: 
+        }
+    ])
+}
 
 async function exit() {
     connection.end();
