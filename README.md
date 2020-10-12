@@ -30,19 +30,21 @@
    
   Go to db folder on command prompt to populate database. On mysql cli, run 'source schema.sql;' then run 'source seeds.sql;' then 'source join.sql;'. Exit mysql. Open [serve.js] in the command line, enter 'npm start' to run application.
 
+  Walkthrough Video: https://drive.google.com/file/d/1X0H1oqN_JrijXBkz3vcIhLPyBo1MakuP/view
+
   ## *Credits*
    
   UCB Bootcamp
 
   ## *License*
    
-  
+  MIT_License
 
   🏆 The sections listed above are the minimum for a good README, but your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
 
   ## *Badges*
 
-  ![alt text](https://img.shields.io/badge/license--blueviolet?style=for-the-badge&logo=appveyor "license badge")
+  ![alt text](https://img.shields.io/badge/license-MIT_License-blueviolet?style=for-the-badge&logo=appveyor "license badge")
 
   ## *Contributing*
    

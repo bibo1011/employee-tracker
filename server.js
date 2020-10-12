@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 const Font = require('ascii-art-font');
+const Choice = require('inquirer/lib/objects/choice');
 
 // Create the connection to database
 const connection = mysql.createConnection({
@@ -80,7 +81,7 @@ async function readDepartments(){
 
 async function readRoles(){
     console.log('Selecting all roles...\n')
-    connection.query('SELECT role.id, role.title as Title, role.department_id as Department, role.salary as Salary FROM role INNER JOIN department ON role.department_id=department.id', function (err, res) {
+    connection.query('SELECT role.id, role.title as Title, department.name as Department, role.salary as Salary FROM role INNER JOIN department ON role.department_id=department.id', function (err, res) {
         if (err) throw err;
         console.table(res);
         afterConnection();
@@ -97,7 +98,6 @@ async function readEmployees(){
 }
 
 async function addDepartment(){
-    // console.log('')
     return inquirer.prompt([
         {
             type: 'input',
@@ -106,7 +106,6 @@ async function addDepartment(){
         }
     ])
     .then (add => {
-        // console.log(add.department);
         console.log('Adding new department...\n');
         connection.query('INSERT INTO department SET ?', 
         { 
@@ -130,35 +129,35 @@ async function addRole() {
         {
             type: 'input',
             name: 'roleSalary',
-            message: 'Enter salary for the role:'
+            message: 'Enter salary for the role:',
+            validate: input => {
+                if (!isNaN(input)) {
+                    return true;
+                }
+                return "Please enter a valid number."
+            }
         },
         {
-            type: 'rawlist',
+            type: 'list',
             name: 'roleDepartment',
             message: 'Enter department for the role:',
-            choices: [
-                'Sales',
-                'Engineering',
-                'Finance',
-                'Legal'
-            ]
-
+            choices: [(1, 'Sales'),(2, 'Engineering'), (3, 'Finance'), (4, 'Legal')]
         }
     ])
     .then (add => {
         console.log(add.roleDepartment);
         console.log('Adding new role...\n');
-        // connection.query('INSERT INTO role SET ?', 
-        // { 
-        //     title: add.roleName,
-        //     salary: add.roleSalary,
-        //     department_id: add.roleDepartment
-        // }, 
-        // function(err, res) {
-        //     if (err) throw err;
-        //     console.table(res.affectedRows);
-        //     readRoles();
-        // })
+        connection.query('INSERT INTO role SET ?', 
+        { 
+            title: add.roleName,
+            salary: add.roleSalary,
+            department_id: add.roleDepartment
+        }, 
+        function(err, res) {
+            if (err) throw err;
+            console.table(res.affectedRows);
+            readRoles();
+        })
     })
 }
 
@@ -188,33 +187,52 @@ async function addEmployee() {
     .then (add => {
         console.log(add.firstName);
         console.log('Adding new employee...\n');
-        // connection.query('INSERT INTO employee SET ?', 
-        // { 
-        //     first_name: add.firstName,
-        //     last_name: add.lastName,
-        //     role_id: add.empRole,
-        //     manager_id: add.empManager
-        // }, 
-        // function(err, res) {
-        //     if (err) throw err;
-        //     console.table(res.affectedRows);
-        //     readEmployee();
-        // })
+        connection.query('INSERT INTO employee SET ?', 
+        { 
+            first_name: add.firstName,
+            last_name: add.lastName,
+            role_id: add.empRole,
+            manager_id: add.empManager
+        }, 
+        function(err, res) {
+            if (err) throw err;
+            console.table(res.affectedRows);
+            readEmployee();
+        })
     })
 }
 
 async function updateRole() {
+    const choice = connection.query('SELECT id, first_name, last_name FROM employee')
     return inquirer.prompt([
         {
             type: 'list',
             name: 'upRole',
             message: 'Select an employee to update:',
-            choices: 
+            choices: [
+                'a','b','c'
+            ]
         }
     ])
+    .then (update => {
+        const query = connection.query('UPDATE employee SET ? WHERE ?', 
+        { 
+            role_id: update.upRole,
+        },
+
+        function(err, res) {
+            if (err) throw err;
+            console.table(res.affectedRows);
+            // readEmployee();
+        });
+        console.log(query.sql)   
+    })
+
 }
 
 async function exit() {
     connection.end();
 }
+
+
   
